@@ -1,0 +1,19 @@
+data:
+  dataset: Jzuluaga/uwb_atcc
+  hf_split: test
+  interim_dir: data/interim
+
+split:
+  dev_fraction: 0.4
+  seed: 42
+
+ingest:
+  max_merge_gap_s: 1.0   # check against the gap plot in Step C
+
+asr:
+  model: jlvdoorn/whisper-large-v3-atco2-asr
+
+llm:
+  model: gemini-3.5-flash-lite
+  timeout_ms: 60000
+  temperature: 0
