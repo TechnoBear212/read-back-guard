@@ -1,0 +1,6 @@
+pyproject.toml
+src/readback_guard/__init__.py
+src/readback_guard.egg-info/PKG-INFO
+src/readback_guard.egg-info/SOURCES.txt
+src/readback_guard.egg-info/dependency_links.txt
+src/readback_guard.egg-info/top_level.txt
