@@ -12,8 +12,18 @@ ingest:
 
 asr:
   model: jlvdoorn/whisper-large-v3-atco2-asr
+  device: mps
+  out_file: data/cache/transcripts_atc-large-v3.jsonl
 
 llm:
   model: gemini-3.5-flash-lite
   timeout_ms: 60000
   temperature: 0
+  cache_dir: data/cache/llm
+
+labels:
+  gold: labels/gold_pairs.csv
+  injected: labels/injected_errors.csv
+
+inject:
+  seed: 42
