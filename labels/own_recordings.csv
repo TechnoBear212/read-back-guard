@@ -1,0 +1,21 @@
+rec_id,atco_text,pilot_text,atco_callsign,pilot_callsign,atco_items,pilot_items,verdict,notes
+r01,csa seven one four climb flight level one zero zero,climb flight level one zero zero csa seven one four,csa 714,csa 714,level=FL100,level=FL100,CORRECT,
+r02,lufthansa four five two descend flight level eight zero,descend flight level nine zero lufthansa four five two,lufthansa 452,lufthansa 452,level=FL80,level=FL90,WRONG_VALUE,level 80 read back as 90
+r03,ryanair three alfa bravo turn right heading two seven zero,right heading two seven zero ryanair three alfa bravo,ryanair 3ab,ryanair 3ab,heading=270,heading=270,CORRECT,
+r04,smartwings one two tango squawk four six two one contact praha radar one two seven decimal one two five,squawk four six two one smartwings one two tango,smartwings 12t,smartwings 12t,squawk=4621;frequency=127.125,squawk=4621,MISSING_ITEM,frequency not read back
+r05,easy four nine six papa reduce speed one eight zero knots,reducing one eight zero easy four nine six papa,easy 496p,easy 496p,speed=180,speed=180,CORRECT,
+r06,wizz air five three zero runway two four cleared to land wind two six zero degrees eight knots,cleared to land runway two four wizz air five three eight,wizz air 530,wizz air 538,runway=24,runway=24,WRONG_CALLSIGN,callsign 530 read back as 538
+r07,austrian six mike alfa contact ruzyne tower one one eight decimal one,one one eight decimal one austrian six mike alfa,austrian 6ma,austrian 6ma,frequency=118.1,frequency=118.1,CORRECT,
+r08,csa three seven alfa squawk two three five one,squawk two three five seven csa three seven alfa,csa 37a,csa 37a,squawk=2351,squawk=2357,WRONG_VALUE,squawk 2351 read back as 2357
+r09,klm one two three runway three zero cleared for takeoff wind two eight zero degrees one zero knots,cleared for takeoff runway three zero klm one two three,klm 123,klm 123,runway=30,runway=30,CORRECT,
+r10,ryanair eight two kilo turn left heading one six zero,left heading one niner zero ryanair eight two kilo,ryanair 82k,ryanair 82k,heading=160,heading=190,WRONG_VALUE,heading 160 read back as 190
+r11,lufthansa one tango charlie descend flight level seven zero reduce speed two two zero knots,descend flight level seven zero lufthansa one tango charlie,lufthansa 1tc,lufthansa 1tc,level=FL70;speed=220,level=FL70,MISSING_ITEM,speed not read back
+r12,smartwings four five six descend altitude four thousand feet qnh one zero two one,descend altitude four thousand feet qnh one zero two one smartwings four five six,smartwings 456,smartwings 456,level=A4000;qnh=1021,level=A4000;qnh=1021,CORRECT,
+r13,csa eight three eight whiskey contact praha radar one two seven decimal five seven five,one two seven decimal five seven five csa eight eight three whiskey,csa 838w,csa 883w,frequency=127.575,frequency=127.575,WRONG_CALLSIGN,callsign 838w read back as 883w
+r14,wizz air two one lima climb flight level two four zero,climb flight level two four zero wizz air two one lima,wizz air 21l,wizz air 21l,level=FL240,level=FL240,CORRECT,
+r15,easy seven two kilo contact ruzyne ground one two one decimal nine,one two one decimal eight easy seven two kilo,easy 72k,easy 72k,frequency=121.9,frequency=121.8,WRONG_VALUE,frequency 121.9 read back as 121.8
+r16,austrian five one two runway zero six line up and wait,line up and wait austrian five one two,austrian 512,austrian 512,runway=06,,MISSING_ITEM,runway not read back
+r17,csa five papa charlie squawk five seven two zero,squawk five seven two zero csa five papa charlie,csa 5pc,csa 5pc,squawk=5720,squawk=5720,CORRECT,
+r18,ryanair one charlie delta climb flight level one two zero,climb flight level one five zero ryanair one charlie delta,ryanair 1cd,ryanair 1cd,level=FL120,level=FL150,WRONG_VALUE,level 120 read back as 150
+r19,lufthansa seven eight five turn right heading zero nine zero,right heading zero nine zero lufthansa seven eight five,lufthansa 785,lufthansa 785,heading=090,heading=090,CORRECT,
+r20,smartwings eight eight papa descend flight level nine zero reduce speed two five zero knots,descend flight level nine zero speed two five zero smartwings eight eight papa,smartwings 88p,smartwings 88p,level=FL90;speed=250,level=FL90;speed=250,CORRECT,
