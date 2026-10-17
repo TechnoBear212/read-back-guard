@@ -88,5 +88,30 @@ def run(cfg):
         print(f"{n}/{len(ds)}  {record['seconds']:.1f}s  {text}")
 
 
+def run_own(cfg):
+    """Transcribe your own recordings (data/own/*.wav) into their own cache file."""
+    import librosa
+
+    out = ROOT / cfg["own"]["out_file"]
+    out.parent.mkdir(parents=True, exist_ok=True)
+    todo = [p for p in sorted((ROOT / cfg["own"]["audio_dir"]).glob("*.wav")) if p.stem not in done_ids(out)]
+    print(len(todo), "recordings to transcribe")
+    if not todo:
+        return
+    processor, model = load_model(cfg["asr"]["model"], cfg["asr"]["device"])
+    for n, path in enumerate(todo, 1):
+        start = time.perf_counter()
+        array, _ = librosa.load(path, sr=16000, mono=True)
+        text, words = transcribe(array, processor, model)
+        record = {"utt_id": path.stem, "asr_model": cfg["asr"]["model"], "hyp_text": text,
+                  "words": words, "seconds": round(time.perf_counter() - start, 2)}
+        with open(out, "a") as f:
+            f.write(json.dumps(record) + "\n")
+        print(f"{n}/{len(todo)}  {record['seconds']:.1f}s  {path.stem}: {text}")
+
+
 if __name__ == "__main__":
-    run(load_config())
+    import sys
+
+    cfg = load_config()
+    run_own(cfg) if sys.argv[1:] == ["own"] else run(cfg)

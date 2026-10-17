@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from math import sqrt
 
 import pandas as pd
+from scipy.stats import binomtest
 
 from readback_guard.config import ROOT
 from readback_guard.schemas import Clearance, Item
@@ -56,12 +57,14 @@ def rates(df):
     det_k = int((errors["pred"] != "CORRECT").sum())
     fa_k = int((correct["pred"] != "CORRECT").sum())
     exact_k = int((df["pred"] == df["verdict"]).sum())
+    say_again = int((df["pred"] == "SAY_AGAIN").sum())
     return {
         "n_errors": len(errors), "detected": det_k,
         "detection_rate": round(det_k / max(len(errors), 1), 3), "detection_ci": wilson(det_k, len(errors)),
         "n_correct": len(correct), "false_alarms": fa_k,
         "false_alarm_rate": round(fa_k / max(len(correct), 1), 3), "false_alarm_ci": wilson(fa_k, len(correct)),
         "exact_verdict_rate": round(exact_k / len(df), 3),
+        "say_again": say_again, "say_again_rate": round(say_again / len(df), 3),
     }
 
 
@@ -79,3 +82,38 @@ def log_result(experiment, split, text_source, metrics, cfg, notes=""):
         if new:
             writer.writeheader()
         writer.writerow(row)
+
+
+def attribution(human, asr):
+    """Same cases run on human text and on Whisper text. Who caused each mistake?
+
+    right = the system's flag (anything but CORRECT) agrees with the gold label.
+    """
+    m = human[["case_id", "verdict", "pred"]].merge(asr[["case_id", "pred"]], on="case_id",
+                                                    suffixes=("_human", "_asr"))
+    is_error = m["verdict"] != "CORRECT"
+    m["human_right"] = (m["pred_human"] != "CORRECT") == is_error
+    m["asr_right"] = (m["pred_asr"] != "CORRECT") == is_error
+    m["cause"] = "right on both"
+    m.loc[m.human_right & ~m.asr_right, "cause"] = "speech recognition"
+    m.loc[~m.human_right & ~m.asr_right, "cause"] = "language understanding"
+    m.loc[~m.human_right & m.asr_right, "cause"] = "right only on Whisper text"
+    m["gold"] = is_error.map({True: "real error (miss if wrong)", False: "correct readback (false alarm if wrong)"})
+    table = pd.crosstab(m["gold"], m["cause"], margins=True, margins_name="total")
+    return m, table
+
+
+def mcnemar(m):
+    """Exact McNemar test on the discordant pairs of attribution()."""
+    b = int((m.human_right & ~m.asr_right).sum())
+    c = int((~m.human_right & m.asr_right).sum())
+    p = binomtest(b, b + c, 0.5).pvalue if b + c else 1.0
+    return {"human_only_right": b, "asr_only_right": c, "p_value": round(float(p), 4)}
+
+
+def md_table(df):
+    """A pandas table as Markdown, for pasting into the report."""
+    df = df.reset_index()
+    lines = ["| " + " | ".join(map(str, df.columns)) + " |", "|" + "---|" * len(df.columns)]
+    lines += ["| " + " | ".join(map(str, row)) + " |" for row in df.itertuples(index=False)]
+    return "\n".join(lines)
