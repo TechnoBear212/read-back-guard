@@ -58,6 +58,8 @@ def rates(df):
     fa_k = int((correct["pred"] != "CORRECT").sum())
     exact_k = int((df["pred"] == df["verdict"]).sum())
     say_again = int((df["pred"] == "SAY_AGAIN").sum())
+    accused = int(correct["pred"].isin(["WRONG_VALUE", "WRONG_CALLSIGN", "MISSING_ITEM"]).sum())
+    missed = int((errors["pred"] == "CORRECT").sum())
     return {
         "n_errors": len(errors), "detected": det_k,
         "detection_rate": round(det_k / max(len(errors), 1), 3), "detection_ci": wilson(det_k, len(errors)),
@@ -65,6 +67,7 @@ def rates(df):
         "false_alarm_rate": round(fa_k / max(len(correct), 1), 3), "false_alarm_ci": wilson(fa_k, len(correct)),
         "exact_verdict_rate": round(exact_k / len(df), 3),
         "say_again": say_again, "say_again_rate": round(say_again / len(df), 3),
+        "false_accusations": accused, "missed": missed,
     }
 
 

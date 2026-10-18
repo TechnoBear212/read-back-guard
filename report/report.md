@@ -27,7 +27,7 @@ audio → Whisper (ATC large-v3, word confidences) → Gemini 3.5 Flash-Lite (cl
 - **Speech:** `jlvdoorn/whisper-large-v3-atco2-asr`, greedy decoding on the Mac GPU; each word's confidence is the lowest token probability inside it.
 - **Extraction:** Gemini returns `{callsign, items[type, value, unit, qualifier]}` validated by a Pydantic schema; answers are cached by model + prompt version + text. Prompt v1 was kept after a v2 attempt gave more false alarms on dev.
 - **Rules:** values are normalised (e.g. `FL120`, `090`, `121.9`) and compared. Precedence: WRONG_CALLSIGN > WRONG_VALUE > MISSING_ITEM > CORRECT. A callsign matches if one is a shortened or cut-off form of the other. 58 unit tests.
-- **Gate:** if any number word on either side was heard below a confidence threshold, the verdict becomes SAY_AGAIN. The threshold was chosen on dev (highest detection minus false-alarm rate) and frozen before the test split.
+- **Gate:** if any number word on either side was heard below a confidence threshold, the verdict becomes SAY_AGAIN. The threshold was chosen on dev and frozen before the test split. The rule written down first (highest detection minus false-alarm rate) counts a "say again" as a false alarm, so it can never reward the gate and picked 0.0 (gate off). After seeing the dev curve, the rule was changed to: fewest false accusations plus missed errors, with "say again" on at most 20% of pairs. This picked 0.4. The change was made on dev only; the test split was untouched.
 - **Agent:** a 3-node LangGraph graph (extract → compare → gate) with retries on invalid JSON or server errors, wrapping the same functions as the experiment pipeline. The Streamlit demo runs it.
 
 ## 4. Experiments and results
@@ -49,7 +49,7 @@ Detection rate = errors flagged (anything but CORRECT) / real errors. False-alar
 
 **Attribution (test, real pairs).** For each pair: right on both texts; wrong only on Whisper text (caused by speech recognition); wrong on both (caused by language understanding, since the rules are near-perfect on gold fields); wrong only on human text. [paste table from results/tables.md]. McNemar's exact test on the discordant pairs: [T].
 
-**Gate trade-off (dev):** see `results/figures/gate_curve_dev.png`. [one sentence: what raising the threshold does to detection, false alarms and say-again rate; the picked value].
+**Gate trade-off (dev):** see `results/figures/gate_curve_dev.png`. On Whisper text, false alarms rose from 2/37 (human text) to 23/37, mostly wrong-callsign verdicts. Raising the threshold turns false accusations into "say again": 23 at threshold 0 (gate off), 16 at 0.4 with 10 of 52 pairs answered "say again", 2 at 0.95 with 43 of 52 answered "say again". Missed errors stay at 2 of 15 until 0.7.
 
 **Own recordings:** [T] per-recording table; how many of the 10 spoken errors were caught on script text, on Whisper text and with the gate.
 
@@ -67,7 +67,7 @@ Detection rate = errors flagged (anything but CORRECT) / real errors. False-alar
 
 ## 7. Deviations from the Blueprint
 
-One ASR model instead of two; 158 gold pairs; runway scored (6 types); Gemini 3.5 Flash-Lite instead of 3.8 Flash (time-outs with JSON output); about 20 own recordings instead of 150; regex baseline dropped; NOT_A_READBACK filtered at labelling; SAY_AGAIN overrides other verdicts when a number is uncertain (Blueprint precedence put it below the error verdicts).
+One ASR model instead of two; 158 gold pairs; runway scored (6 types); Gemini 3.5 Flash-Lite instead of 3.8 Flash (time-outs with JSON output); about 20 own recordings instead of 150; regex baseline dropped; NOT_A_READBACK filtered at labelling; SAY_AGAIN overrides other verdicts when a number is uncertain (Blueprint precedence put it below the error verdicts); the gate threshold rule was changed on dev after the first rule picked 0.0.
 
 ## 8. Who did what
 
