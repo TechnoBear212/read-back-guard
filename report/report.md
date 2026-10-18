@@ -55,7 +55,7 @@ Detection rate = errors flagged (anything but CORRECT) / real errors. False-alar
 
 ## 5. Discussion
 
-[Answer the research question in three sentences using the attribution table: which source causes more false alarms, which causes more misses, and whether the gate helps.]
+Most errors produced by the system are false alarms, with speech recognition being the primary source of these mistakes. In the test split, 40 readbacks that were correctly identified using human-transcribed text were incorrectly flagged when Whisper-generated text was used, compared with 11 cases where both sources failed due to language-understanding errors and 7 cases where the opposite occurred (McNemar's test, *p* < 0.0001). Missed errors were uncommon in both cases, with only 1 out of 24 occurring on human-transcribed text and none on Whisper text. These results suggest that the main concern is an overly sensitive checker that raises incorrect warnings rather than one that fails to detect genuine errors. Callsign recognition appears to be the main weakness: Whisper struggles considerably more with airline names and pilot callsigns than with numerical information. Although the critical-value error rate is 16%, 31 of the 51 false alarms are attributed to `WRONG_CALLSIGN`. The existing confidence gate, which evaluates only numerical values, converted 6 of the 51 false accusations into "say again" responses, while generating 19 such responses across 106 pairs. While this provides some improvement, a more effective solution would involve a confidence mechanism that also accounts for callsign recognition or an ASR model trained to recognize the airline names and callsign vocabulary specific to the airport.
 
 ## 6. Limits
 
