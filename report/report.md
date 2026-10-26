@@ -1,6 +1,6 @@
 # Readback Guard: checking pilot readbacks with speech recognition and an LLM
 
-Abdul, atomcamp AI Bootcamp final project (NLP/LLM track), October 2026. Supervisor: Mr. Muhammad Umair.
+Abdul Rahman, atomcamp AI Bootcamp final project (NLP/LLM track), October 2026. Supervisor: Mr. Muhammad Umair.
 
 ## 1. Problem
 

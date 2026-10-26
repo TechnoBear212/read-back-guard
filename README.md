@@ -1,7 +1,7 @@
 # Readback Guard
 
 An LLM-based agent that checks whether a pilot read back an air traffic control instruction correctly.
-atomcamp AI Bootcamp final project (NLP/LLM track), October 2026. Author: Abdul. Supervisor: Mr. Muhammad Umair.
+atomcamp AI Bootcamp final project (NLP/LLM track), October 2026. Author: Abdul Rahman. Supervisor: Mr. Muhammad Umair.
 
 **Full report:** [`report/Readback_Guard_Report.pdf`](report/Readback_Guard_Report.pdf)
 

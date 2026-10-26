@@ -1,9 +1,15 @@
 ---
 title: "Readback Guard"
 subtitle: "Checking pilot readbacks with speech recognition and a large language model"
-author: "Abdul · atomcamp AI Bootcamp final project (NLP/LLM track) · Supervisor: Mr. Muhammad Umair"
+author: "Abdul Rahman · atomcamp AI Bootcamp final project (NLP/LLM track) · Supervisor: Mr. Muhammad Umair"
 date: "October 2026"
 ---
+
+## Foreword
+
+*I would like to thank the amazing people at atomcamp who through their sheer determination allowed me to reach a threshold that pushed me to the best of my abilities, through which I was able to complete this project, here is to conquering the world of knowledge with atomcamp.*
+
+<p class="sign">Abdul Rahman</p>
 
 ## Abstract
 
